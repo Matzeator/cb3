@@ -28,7 +28,7 @@ public class RModularScanner implements Scanner, ISubmission {
     }
 
     public boolean isAtEndOfInput {
-        if(this.pos == this.input.length()){
+        if(this.input.length() <= this.pos){
             return true;
         }
         else {
@@ -41,26 +41,101 @@ public class RModularScanner implements Scanner, ISubmission {
             throw new LexicalAnalysisException("Eingabestring ist zueende");
         }
         else {
-            if (input[pos] == '+')
-                return Terminals.plus;
-            if (input[pos] == '*')
-                return Terminals.times;
-            if (input[pos] == '(')
-                return Terminals.open_bracket;
-            if (input[pos] == ')')
-                return Terminals.close_bracket;
-            if (input[pos] == ':'){
-                if (input[pos + 1] == '=')
-                    return Terminals.colon_equal;
-             }
-            if(input[pos] == 'i'){
-                if(input[pos + 1] == 'd')
-                    return Terminals.id;
-                if(input[pos + 1] == 'f')
-                    return Terminals.if
+            while(pos < inputString.length()) {
+                if (input[pos] == '+' && (inputString.length < pos + 1 || input[pos + 1] == ' ' || input[pos + 1] == '/n'))
+                    return Terminals.plus;
+                if (input[pos] == '*' && (inputString.length < pos + 1 || input[pos + 1] == ' ' || input[pos + 1] == '/n'))
+                    return Terminals.times;
+                if (input[pos] == '(' && (inputString.length < pos + 1 || input[pos + 1] == ' ' || input[pos + 1] == '/n'))
+                    return Terminals.open_bracket;
+                if (input[pos] == ')' && (inputString.length < pos + 1 || input[pos + 1] == ' ' || input[pos + 1] == '/n'))
+                    return Terminals.close_bracket;
+
+                if (pos + 1 < inputString.length() && (inputString.length < pos + 1 || input[pos + 1] == ' ' || input[pos + 1] == '/n')) {
+                    if (input[pos] == ':') {
+                        if (input[pos + 1] == '=')
+                            return Terminals.colon_equal;
+                    }
+                    if (input[pos] == 'f') {
+                        if (input[pos + 1] == 'i')
+                            return Terminals.fi;
+                    }
+
+                    if (input[pos] == 'd') {
+                        if (input[pos + 1] == 'o') {
+                            return Terminals.do_;
+                        }
+                    }
+                    if (input[pos] == 'o') {
+                        if (input[pos + 1] == 'd') {
+                            return Terminals.od;
+                        }
+                    }
+                    if (input[pos] == 'i') {
+                        if (input[pos + 1] == 'd')
+                            return Terminals.id;
+                        if (input[pos + 1] == 'f')
+                            return Terminals.if_;
+                    }
+                }
+                if (pos + 2 < inputString.length() && (inputString.length < pos + 1 || input[pos + 1] == ' ' || input[pos + 1] == '/n')) {
+                    if (input[pos] == 'c') {
+                        if (input[pos + 1] == 'o') {
+                            if (input[pos + 2] == 'p') {
+                                return Terminals.cop;
+                            }
+                        }
+                    }
+
+                }
+                if (pos + 3 < inputString.length() && (inputString.length < pos + 1 || input[pos + 1] == ' ' || input[pos + 1] == '/n')) {
+                    if (input[pos] == 't') {
+                        if (input[pos + 1] == 'h') {
+                            if (input[pos + 2] == 'e') {
+                                if (input[pos + 3] == 'n') {
+                                    return Terminals.then;
+                                }
+                            }
+                        }
+                    }
+                    if (input[pos] == 'e') {
+                        if (input[pos + 1] == 'l') {
+                            if (input[pos + 2] == 's') {
+                                if (input[pos + 3] == 'e') {
+                                    return Terminals.else_;
+                                }
+                            }
+                        }
+                    }
+                }
+                if (pos + 4 < inputString.length() && (inputString.length < pos + 1 || input[pos + 1] == ' ' || input[pos + 1] == '/n')) {
+                    if (input[pos] == 'c') {
+                        if (input[pos + 1] == 'o') {
+                            if (input[pos + 2] == 'n') {
+                                if (input[pos + 3] == 's') {
+                                    if (input[pos + 4] == 't') {
+                                        return Terminals.const_;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    if (input[pos] == 'w') {
+                        if (input[pos + 1] == 'h') {
+                            if (input[pos + 2] == 'i') {
+                                if (input[pos + 3] == 'l') {
+                                    if (input[pos + 4] == 'e') {
+                                        return Terminals.while_;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    pos++;
+                }
             }
-
-
+            return null;
 
         }
     }
@@ -74,14 +149,8 @@ public class RModularScanner implements Scanner, ISubmission {
         else {
             Token newToken = this.nextToken;
             this.nextToken = null;
-
-            try {
-                this.nextToken = this.findToken();
-                this.exception = null;
-            } catch(LexicalAnalysisException ex2) {
-                this.exception = ex2;
-            }
-
+            this.nextToken = this.findToken();
+            return this.nextToken
         }
         return null;
     }
