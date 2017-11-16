@@ -5,14 +5,15 @@ import uni_bayreuth.ai6.compiler.exercises.interfaces.Scanner;
 import uni_bayreuth.ai6.exercises.submission.Authors;
 import uni_bayreuth.ai6.exercises.submission.ISubmission;
 import uni_bayreuth.ai6.exercises.submission.Student;
-import uni_bayeruth.ai6.exercises.conextfreegrammer.StdToken;
+import uni_bayeruth.ai6.compiler.exercises.conextfreegrammer.StdToken;
+import uni_bayreuth.ai6.compiler.exercises.ws17_18.exercise3.Terminals;
 
 
 public class RModularScanner implements Scanner, ISubmission {
     private String inputString = "";
     private char[] input;
     private int pos = 0;
-    private Token nextToken = null;
+    private StdToken nextStdToken = null;
     private LexicalAnalysisException exception = null;
 
     @Override
@@ -21,13 +22,13 @@ public class RModularScanner implements Scanner, ISubmission {
         this.nextToken = null;
         this.exception = null;
         try{
-            this.nextToken = this.getnNextToken();
+            this.nextToken = this.getNextToken();
         } catch (LexicalAnalysisException ex1) {
             this.exception = ex1;
         }
     }
 
-    public boolean isAtEndOfInput {
+    public boolean isAtEndOfInput() {
         if(this.input.length() <= this.pos){
             return true;
         }
@@ -36,22 +37,22 @@ public class RModularScanner implements Scanner, ISubmission {
         }
     }
 
-    public Token findToken() throws LexicalAnalysisException {
-        if(this.isAtendOfInput()){
+    public StdToken findToken() throws LexicalAnalysisException {
+        if(this.isAtEndOfInput()){
             throw new LexicalAnalysisException("Eingabestring ist zueende");
         }
         else {
             while(pos < inputString.length()) {
-                if (input[pos] == '+' && (inputString.length < pos + 1 || input[pos + 1] == ' ' || input[pos + 1] == '/n'))
+                if (input[pos] == '+' && (inputString.length() < pos + 1 || input[pos + 1] == ' ' || input[pos + 1] == '\n'))
                     return Terminals.plus;
-                if (input[pos] == '*' && (inputString.length < pos + 1 || input[pos + 1] == ' ' || input[pos + 1] == '/n'))
+                if (input[pos] == '*' && (inputString.length() < pos + 1 || input[pos + 1] == ' ' || input[pos + 1] == '\n'))
                     return Terminals.times;
-                if (input[pos] == '(' && (inputString.length < pos + 1 || input[pos + 1] == ' ' || input[pos + 1] == '/n'))
+                if (input[pos] == '(' && (inputString.length() < pos + 1 || input[pos + 1] == ' ' || input[pos + 1] == '\n'))
                     return Terminals.open_bracket;
-                if (input[pos] == ')' && (inputString.length < pos + 1 || input[pos + 1] == ' ' || input[pos + 1] == '/n'))
+                if (input[pos] == ')' && (inputString.length() < pos + 1 || input[pos + 1] == ' ' || input[pos + 1] == '\n'))
                     return Terminals.close_bracket;
 
-                if (pos + 1 < inputString.length() && (inputString.length < pos + 1 || input[pos + 1] == ' ' || input[pos + 1] == '/n')) {
+                if (pos + 1 < inputString.length() && (inputString.length() < pos + 1 || input[pos + 1] == ' ' || input[pos + 1] == '\n')) {
                     if (input[pos] == ':') {
                         if (input[pos + 1] == '=')
                             return Terminals.colon_equal;
@@ -78,7 +79,7 @@ public class RModularScanner implements Scanner, ISubmission {
                             return Terminals.if_;
                     }
                 }
-                if (pos + 2 < inputString.length() && (inputString.length < pos + 1 || input[pos + 1] == ' ' || input[pos + 1] == '/n')) {
+                if (pos + 2 < inputString.length() && (inputString.length() < pos + 1 || input[pos + 1] == ' ' || input[pos + 1] == '\n')) {
                     if (input[pos] == 'c') {
                         if (input[pos + 1] == 'o') {
                             if (input[pos + 2] == 'p') {
@@ -88,7 +89,7 @@ public class RModularScanner implements Scanner, ISubmission {
                     }
 
                 }
-                if (pos + 3 < inputString.length() && (inputString.length < pos + 1 || input[pos + 1] == ' ' || input[pos + 1] == '/n')) {
+                if (pos + 3 < inputString.length() && (inputString.length() < pos + 1 || input[pos + 1] == ' ' || input[pos + 1] == '\n')) {
                     if (input[pos] == 't') {
                         if (input[pos + 1] == 'h') {
                             if (input[pos + 2] == 'e') {
@@ -108,7 +109,7 @@ public class RModularScanner implements Scanner, ISubmission {
                         }
                     }
                 }
-                if (pos + 4 < inputString.length() && (inputString.length < pos + 1 || input[pos + 1] == ' ' || input[pos + 1] == '/n')) {
+                if (pos + 4 < inputString.length() && (inputString.length() < pos + 1 || input[pos + 1] == ' ' || input[pos + 1] == '\n')) {
                     if (input[pos] == 'c') {
                         if (input[pos + 1] == 'o') {
                             if (input[pos + 2] == 'n') {
@@ -144,13 +145,13 @@ public class RModularScanner implements Scanner, ISubmission {
 
     @Override Token getNextToken() throws LexicalAnalysisException {
         if(this.nextToken == null) {
-            throw new LexicalAnalysisException("Keine Token uebrig");
+            throw new LexicalAnalysisException("Keine StdToken uebrig");
         }
         else {
-            Token newToken = this.nextToken;
+            StdToken newToken = this.nextToken;
             this.nextToken = null;
             this.nextToken = this.findToken();
-            return this.nextToken
+            return this.nextToken;
         }
         return null;
     }
@@ -167,7 +168,7 @@ public class RModularScanner implements Scanner, ISubmission {
         Authors authors = new Authors();
         authors.addAuthor(new Student("Matthias", "Babel", "s1mababe@uni-bayreuth.de", 1394333));
         authors.addAuthor(new Student("Felix", "Nickels", "s1fenick@uni-bayreuth.de", 1383344));
-        return authors
+        return authors;
     }
 
 }
